@@ -1,8 +1,20 @@
 import csv
 import os
 
-folder_path = "E:\AI_Data Science\Projects\Expense"
-def Search_By_Category():
+folder_path = r"E:\AI_Data Science\Projects\Expense"
+
+Categories_List = {
+    1: "Food",
+    2: "Transport",
+    3: "Shopping",
+    4: "Utility_Bills",
+    5: "Entertainment",
+    6: "Education",
+    7: "Medical",
+    8: "Travel"
+}
+
+def Show_Categories():
     print("*"*50)
     print("1.Food")
     print("2.Transport")
@@ -14,229 +26,108 @@ def Search_By_Category():
     print("8.Travel")
     print("9.Other")
     print("*"*50)
-    user_category = int(input("Enter Choice(1/2/3/4/5/6/7/8):"))
+
+def Read_Category_File(category_name):
+    Total = 0
+    file_path = os.path.join(folder_path, f"{category_name}_Expense.csv")
+
+    if not os.path.exists(file_path):
+        print(f"No expenses found yet for {category_name}.")
+        return
+
+    with open(file_path, "r") as file:
+        expense = csv.reader(file)
+        for rows in expense:
+            if not rows:
+                continue
+            Spending_Amount = int(rows[1])
+            Spending_Date = rows[2]
+            Total += Spending_Amount
+            print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
+
+    print(f"Total Spending In {category_name} is Rs.{Total}")
+
+def Search_By_Category():
+    Show_Categories()
+    user_category = int(input("Enter Choice(1/2/3/4/5/6/7/8/9):"))
     print("*"*50)
 
-    if user_category == 1:
-       with open("Projects\\Expense\\Food_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Food_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Food is Rs.{Total_Food_Expense}")
+    if user_category in Categories_List:
+        Read_Category_File(Categories_List[user_category])
+    elif user_category == 9:
+        expense_category = input("Please Enter The Expense Category Name That You Have Added In Add Expense"
+        "(First Letter Must Be Capital):")
+        Read_Category_File(expense_category)
+    else:
+        print("Invalid Option!!!...")
 
-    elif user_category == 2:
-       with open("Projects\\Expense\\Transport_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Transport_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Transport is Rs.{Total_Transport_Expense}")
+def Write_Category_File(category_name, Expense_Amount, Expense_Date_Input):
+    os.makedirs(folder_path, exist_ok=True)
+    file_path = os.path.join(folder_path, f"{category_name}_Expense.csv")
 
-        
-    if user_category == 3:
-       with open("Projects\\Expense\\Shopping_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Shopping_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Shopping is Rs.{Total_Shopping_Expense}")
-    
-    if user_category == 4:
-       with open("Projects\\Expense\\Utilitybills_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Utility_Bills_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Utility Bills is Rs.{Total_Utility_Bills_Expense}")
-    
-    if user_category == 5:
-       with open("Projects\\Expense\\Entertainment_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Entertainment_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Entertainment is Rs.{Total_Entertainment_Expense}")
-    
-    if user_category == 6:
-       with open("Projects\\Expense\\Education_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Education_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Education is Rs.{Total_Education_Expense}")
+    with open(file_path, "a", newline="") as file:
+        expense = csv.writer(file)
+        expense.writerow([category_name, Expense_Amount, Expense_Date_Input])
 
-    if user_category == 7:
-       with open("Projects\\Expense\\Medical_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Medical_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Medical is Rs.{Total_Medical_Expense}")
-    
-    if user_category == 8:
-       with open("Projects\\Expense\\Travel_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total_Travel_Expense += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In Travel is Rs.{Total_Travel_Expense}")
-    
-    if user_category == 9:
-       expense_category = input("Please Enter The Expense Category Name That You Have Added In Add Expense"
-       "(First Letter Must Be Capital):")
-       with open(f"Projects\\Expense\\{expense_category}_Expense.csv","r") as file:
-            expense = csv.reader(file)
-            for rows in expense:
-                Spending_Amount = int(rows[1])
-                Spending_Date = rows[2]
-                Total += Spending_Amount
-                print(f"Date: {Spending_Date} ,, Amount:{Spending_Amount}")
-            print(f"Total Spending In {user_category} is Rs.{Total}")
-                      
+    print(f"Amount Of Rs.{Expense_Amount} Spend On {category_name} On Date:{Expense_Date_Input}")
+    print(f"------- Expense Added In File : {category_name}_Expense.csv -------")
+
 def Categories():
-        Expense_Date_Input = input("Enter The Date:")
+    Expense_Date_Input = input("Enter The Date:")
 
-        print("*"*50)
-        print("1.Food")
-        print("2.Transport")
-        print("3.Shopping")
-        print("4.Utility Bills")
-        print("5.Entertainment")
-        print("6.Education")
-        print("7.Medical")
-        print("8.Travel")
-        print("9.Other")
-        print("*"*50)
-        
-        user_category = int(input("Enter Choice(1/2/3/4/5/6/7/8):"))
-        print("*"*50)
-        if user_category == 1:
-            Expense_Amount = int(input("Enter The Amount In Food Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Food On Date:{Expense_Date_Input}")
-            with open("Projects\Expense\Food_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category:Food , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Food_Expense.csv -------")
-                
-        elif user_category == 2:
-            Expense_Amount = int(input("Enter The Spending Amount In Transport Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Transport On Date:{Expense_Date_Input}")
-            with open("Projects\Expense\Transport_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category:Transport , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Transport_Expense.csv -------") 
+    Show_Categories()
+    user_category = int(input("Enter Choice(1/2/3/4/5/6/7/8/9):"))
+    print("*"*50)
 
-        elif user_category == 3:
-            Expense_Amount = int(input("Enter The Spending Amount In Shopping Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Shopping On Date:{Expense_Date_Input}")
-            with open("Projects\Expense\Shopping_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category:Shopping , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Shopping_Expense.csv -------")
-        
-        elif user_category == 4:
-            Expense_Amount = int(input("Enter The Spending Amount In Utility Bills Expense: "))
-            with open("Projects\\Expense\\Utility_Bills_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: Utility Bills , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Utility Bills On Date:{Expense_Date_Input}")
-            print("------- Expense Added In File : Utility_Bills_Expense.csv -------")
+    if user_category in Categories_List:
+        category_name = Categories_List[user_category]
+        Expense_Amount = int(input(f"Enter The Amount In {category_name} Expense: "))
+        Write_Category_File(category_name, Expense_Amount, Expense_Date_Input)
 
-        elif user_category == 5:
-            Expense_Amount = int(input("Enter The Spending Amount In Entertainment Expense: "))
-            with open("Projects\Expense\Entertainment_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: Entertainment , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Entertainment On Date:{Expense_Date_Input}")
-            print("------- Expense Added In File : Entertainment_Expense.csv -------")
+    elif user_category == 9:
+        expense_category = input("Please Enter The Expense Category Name:")
+        Expense_Amount = int(input(f"Enter The Spending Amount In {expense_category} Expense: "))
+        Write_Category_File(expense_category, Expense_Amount, Expense_Date_Input)
 
-        elif user_category == 6:
-            Expense_Amount = int(input("Enter The Spending Amount In Education Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Education On Date:{Expense_Date_Input}")
-            with open("Projects\Expense\Education_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: Education , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Edication_Expense.csv -------")
+    else:
+        print("Invalid Options!!!...")
 
-        elif user_category == 7:
-            Expense_Amount = int(input("Enter The Spending Amount In Medical Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Medical On Date:{Expense_Date_Input}")
-            with open("\Projects\Expense\Medical_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: Medical , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Medical_Expense.csv -------")
-
-        elif user_category == 8:
-            Expense_Amount = int(input("Enter The Spending Amount In Travel Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On Travel On Date:{Expense_Date_Input}")
-            with open("Projects\Expense\Travel_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: Travel , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print("------- Expense Added In File : Travel_Expense.csv -------")
-        elif user_category == 9:
-            print()
-            expense_category = input("Please Enter The Expense Category Name:")
-            Expense_Amount = int(input(f"Enter The Spending Amount In {expense_category} Expense: "))
-            print(f"Amount Of Rs.{Expense_Amount} Spend On {expense_category} On Date:{Expense_Date_Input}")
-            with open(f"Projects\Expense\{expense_category}_Expense.csv","a") as file:
-                expense = csv.writer(file)
-                expense.writerow([f"Category: {expense_category} , Spending_Amount:{Expense_Amount} , Date:{Expense_Date_Input}"])
-            print(f"------- Expense Added In File : {expense_category}_Expense.csv -------")
-        else:
-            print("Invalid Options!!!...")
-    
 def Add_Expense():
-    Categories()   
+    Categories()
     Menu()
+
 def View_Expense():
-        total = 0
-        file_in_folder = os.listdir(folder_path)
-        # print(file_in_folder)
-        for files in file_in_folder:
-            if files.endswith(".csv"):
-                full_file_path = os.path.join(folder_path,files)
-                with open(full_file_path,"r") as expense_file :
-                    read_file = csv.reader(expense_file)
-
-                    for total_expense in read_file:
-                        total += int(total_expense[1]) 
-                        Category = total_expense[0]
-                    print(f"Category:{Category}  ,,  Expense:{total}")  
-
-def Total_Expense():
-    total = 0
-    grandtotal = 0
     file_in_folder = os.listdir(folder_path)
-    # print(file_in_folder)
     for files in file_in_folder:
         if files.endswith(".csv"):
-            full_file_path = os.path.join(folder_path,files)
-            with open(full_file_path,"r") as expense_file :
+            total = 0
+            Category = files.replace("_Expense.csv", "")
+            full_file_path = os.path.join(folder_path, files)
+            with open(full_file_path, "r") as expense_file:
                 read_file = csv.reader(expense_file)
-
                 for total_expense in read_file:
-                    total += int(total_expense[1]) 
-                    Category = total_expense[0]
-                    grandtotal += total
-            print(f"Category:{Category}  ,,  Expense:{total}") 
-            print("The GrandTotal Of The Expenses In Expense Folder is : Rs.",grandtotal) 
+                    if not total_expense:
+                        continue
+                    total += int(total_expense[1])
+            print(f"Category:{Category}  ,,  Expense:{total}")
+
+def Total_Expense():
+    grandtotal = 0
+    file_in_folder = os.listdir(folder_path)
+    for files in file_in_folder:
+        if files.endswith(".csv"):
+            total = 0
+            Category = files.replace("_Expense.csv", "")
+            full_file_path = os.path.join(folder_path, files)
+            with open(full_file_path, "r") as expense_file:
+                read_file = csv.reader(expense_file)
+                for total_expense in read_file:
+                    if not total_expense:
+                        continue
+                    total += int(total_expense[1])
+            print(f"Category:{Category}  ,,  Expense:{total}")
+            grandtotal += total
+    print("The GrandTotal Of The Expenses In Expense Folder is : Rs.", grandtotal)
 
 def Menu():
     while True:
@@ -263,4 +154,7 @@ def Menu():
             Search_By_Category()
         elif user_choice == 5:
             break
-Menu()
+
+if __name__ == "__main__":
+    os.makedirs(folder_path, exist_ok=True)
+    Menu()
